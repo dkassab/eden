@@ -146,6 +146,29 @@ $(document).ready(function() {
                 }
             }
             $('#req_req_purpose').val(JSON.stringify(items));
+         } else if (type == 3) {
+             	// Fix to compare dates before submit
+             	// Fix submitted by Jeff Hurvitz on 2/11/13
+             	// Uses Converter function of anytime widget to compare date required with
+             	// date required until.  Displays error if date required until is after date required.
+ 		
+ 		var defaultConv = new AnyTime.Converter();
+ 		var firstdate = defaultConv.parse($('#req_req_date_required').val());
+ 		var seconddate = defaultConv.parse($('#req_req_date_required_until').val());
+ 		
+ 		if (firstdate > seconddate){
+ 			// Remove old datet error if any
+        			$("#date__error").remove();
+        			// Display error
+ 			$('#req_req_date_required_until__row').after('<div id="date__error" class="error" style="display: block;">Date Required Until Must be Later Than Date Needed By</div>');
+ 			// Reset the Navigation protection
+                 	S3SetNavigateAwayConfirm();
+                 	// Move focus to this field
+ 			$('#req_req_date_required_until').focus();
+ 			// Don't Allow Submit			
+ 			return false;	
+ 		}
+
         } else {
             // Items/Skills
             if ($('#req_req_comments').val() == i18n.req_next_msg) {
@@ -157,3 +180,4 @@ $(document).ready(function() {
         return true;
     });
 });
+
